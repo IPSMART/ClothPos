@@ -23,7 +23,6 @@ namespace IPSMART_CLOTHPOS
 {
     public class DBConnection
     {
-        public OracleCommand com = new OracleCommand();
         public OracleDataAdapter da = new OracleDataAdapter();
         //public DataSet ds = new DataSet();
         //public OracleCommandBuilder cb = new OracleCommandBuilder();
@@ -51,7 +50,7 @@ namespace IPSMART_CLOTHPOS
             string[] cc = connectionString.Split(';');
             string user = cc[1].ToString().Substring(8);
             string pass = cc[2].ToString().Substring(9);
-            return cc[0].ToString() + ";User ID=" + Decrypt(user) + ";Password=impvr2017";
+            return cc[0].ToString() + ";User ID=" + Decrypt(user) + ";Password=" + Decrypt(pass) + "";
         }
 
         string CS = "";
@@ -61,6 +60,7 @@ namespace IPSMART_CLOTHPOS
             DataTable dt = new DataTable();
             try
             {
+                OracleCommand com = new OracleCommand();
                 using (OracleConnection con = new OracleConnection(CS))
                 {
                     if (con.State == ConnectionState.Closed)
@@ -68,7 +68,7 @@ namespace IPSMART_CLOTHPOS
                         con.Open();
                     }
                     string SQLQuery = SQL;
-                    com = new OracleCommand(SQLQuery,con);
+                    com = new OracleCommand(SQLQuery, con);
                     da.SelectCommand = com;
                     da.Fill(dt);
                     com.Dispose();
@@ -82,11 +82,12 @@ namespace IPSMART_CLOTHPOS
                 //SaveException(ex, SQL);
                 return null;
             }
-            }
+        }
         public string SQLNonQuery(string SQL)
         {
             try
             {
+                OracleCommand com = new OracleCommand();
                 string CS = GetConnectionString();
                 using (OracleConnection con = new OracleConnection(CS))
                 {
